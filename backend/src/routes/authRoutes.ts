@@ -1,8 +1,10 @@
 import { Router } from "express";
+import { authCallback, getMe } from "../controllers/authController";
+import { protectRoute } from "../middleware/auth";
 
 const router = Router();
 
-// router.post("/register", register);
-// router.post("/login", login);
+router.get("/me", protectRoute, getMe);
+router.post("/callback", protectRoute, authCallback)
 
 export default router;
