@@ -35,3 +35,4 @@ MessageSchema.index({ chat: 1, createdAt: 1 }); // oldest one first
 // -1 -> desc
 
 export default mongoose.model<IMessage>("Message", MessageSchema);
+// export const Message = mongoose.model("Message", MessageSchema);
