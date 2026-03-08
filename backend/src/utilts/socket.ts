@@ -6,9 +6,7 @@ import Chat from "../models/Chat"
 import User from "../models/User"
 
 
-interface SocketWithUserId extends Socket {
-  userId: string
-}
+
 
 export const onlineUsers = new Map<string, string>()
 
@@ -17,8 +15,8 @@ export const initializeSocket = (httpServer: HttpServer) => {
   const allowedOrigins = [
     "http://localhost:8081", // Expo mobile
     "http://localhost:5173", // Vite web dev
-    process.env.FRONTEND_URL! as string, // production
-  ]
+    process.env.FRONTEND_URL!, // production
+  ].filter(Boolean) as string[]
 
   const io = new SocketServer(httpServer, { cors: { origin: allowedOrigins } })
 
@@ -36,7 +34,7 @@ export const initializeSocket = (httpServer: HttpServer) => {
       if (!user) {
         return next(new Error("User not found"))
       }
-      (socket as SocketWithUserId).userId = user._id.toString()
+      socket.data.userId = user._id.toString()
 
       next()
     } catch (error) {
@@ -45,7 +43,7 @@ export const initializeSocket = (httpServer: HttpServer) => {
   })
 
   io.on("connection", (socket) => {
-    const userId = (socket as SocketWithUserId).userId
+    const userId = socket.data.userId
 
     // send list of active users to the connected user
     socket.emit("online-users", { userIds: Array.from(onlineUsers.keys()) });
@@ -85,7 +83,7 @@ export const initializeSocket = (httpServer: HttpServer) => {
         chat.lastMessage = message._id
         chat.lastMessageAt = message.createdAt
         await chat.save()
-        await message.populate("sender", "name email avatar")
+        await message.populate("sender", "name avatar")
 
         io.to(`chat:${chatId}`).emit("new-message", message)
 
