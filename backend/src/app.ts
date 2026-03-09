@@ -1,4 +1,5 @@
 import express from "express";
+import path from "path";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes";
 import userRoutes from "./routes/userRoutes";
@@ -28,4 +29,12 @@ app.use("/api/chats", chatRoutes);
 
 // curl get command: curl http://localhost:3005/health
 app.use(errorHandler)
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../../web/dist")))
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../../web/dist/index.html"))
+  })
+}
 export default app;
