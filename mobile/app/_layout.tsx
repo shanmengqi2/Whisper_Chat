@@ -2,14 +2,13 @@ import { Stack } from "expo-router";
 import "../global.css"
 import { ClerkProvider } from '@clerk/expo'
 import { tokenCache } from '@clerk/expo/token-cache'
-import { SafeAreaProvider } from "react-native-safe-area-context";
-
-const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import AuthSync from "@/components/AuthSync";
 import { StatusBar } from "expo-status-bar";
 import * as Sentry from '@sentry/react-native';
+
+const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!
 
 Sentry.init({
   dsn: 'https://d4c77edee021313d268daf9432b2baf7@o4511033830211584.ingest.us.sentry.io/4511033838403584',
@@ -42,6 +41,14 @@ export default Sentry.wrap(function RootLayout() {
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: "#0d0d0f" } }}>
             <Stack.Screen name="(auth)" options={{ animation: "fade" }} />
             <Stack.Screen name="(tabs)" options={{ animation: "fade" }} />
+            <Stack.Screen
+              name="new-chat"
+              options={{
+                animation: "slide_from_bottom",
+                presentation: "modal",
+                gestureEnabled: true,
+              }}
+            />
           </Stack>
         </SafeAreaProvider>
       </QueryClientProvider>

@@ -1,5 +1,5 @@
 import { View, Text, Dimensions, Pressable, ActivityIndicator } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Image } from "expo-image";
 import React from 'react'
 import useAuthSocial from "../../hooks/useSocialAuth";
@@ -12,6 +12,7 @@ const { width, height } = Dimensions.get('window')
 
 const AuthScreen = () => {
   const { handleSocialAuth, loadingStrategy } = useAuthSocial();
+  const insets = useSafeAreaInsets();
 
   const isLoading = loadingStrategy !== null;
   return (
@@ -60,7 +61,10 @@ const AuthScreen = () => {
         />
       </View>
 
-      <SafeAreaView className='flex-1'>
+      <View
+        className='flex-1'
+        style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+      >
         {/* Top Section - Branding */}
         <View className="items-center pt-10">
           <Image
@@ -136,7 +140,7 @@ const AuthScreen = () => {
         </View>
 
 
-      </SafeAreaView>
+      </View>
     </View>
   )
 }

@@ -11,6 +11,7 @@ const ChatItem = ({ chat, onPress }: { chat: Chat, onPress: () => void }) => {
   const isOnline = true;
   const isTyping = false;
   const hasUnread = false;
+  // console.log("pppppttttiiipppp", participant)
   return (
     <View>
       <Pressable className='flex-row items-center py-3 active:opacity-70' onPress={onPress}>
